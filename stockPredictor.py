@@ -1,5 +1,6 @@
 import pandas as pd
-import matplotlib.pyplot as plt
+import joblib
+# import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
@@ -49,21 +50,27 @@ X_test_scaled = scaler.transform(X_test)
 model = LinearRegression()
 model.fit(X_train_scaled, y_train)
 
-# predictions
-y_pred = model.predict(X_test_scaled)
+# Save the trained model to a file
+joblib.dump(model, 'linear_regression_model.pkl')
 
 # Evaluate the model
+y_pred = model.predict(X_test_scaled)
 mse = mean_squared_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
 
 print(f"Mean Squared Error: {mse}")
 print(f"R-squared: {r2}")
 
+joblib.dump(scaler, 'scaler.pkl')
+
+"""
 # Prints the first few predictions and actual values
 comparison_df = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})
 print(comparison_df.head())
+"""
 
-# Plot Actual vs. Predicted values
+"""
+# Plot Actual vs. Predicted values 
 plt.figure(figsize=(10, 6))
 plt.scatter(y_test, y_pred, alpha=0.5)
 plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')  # Line for perfect prediction
@@ -71,3 +78,4 @@ plt.xlabel('Actual Values')
 plt.ylabel('Predicted Values')
 plt.title('Actual vs. Predicted Values')
 plt.show()
+"""
